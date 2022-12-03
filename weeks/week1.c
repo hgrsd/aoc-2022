@@ -3,23 +3,21 @@
 #include <stdlib.h>
 #include "common.h"
 
-void print_max(char *buf) {
-    int max, cur = 0;
-    char *start, *end;
+void print_max(NODE *lines) {
+    int max = 0;
+    int cur = max;
 
-    start = end = buf;
-
-    while ((end = strchr(start, '\n')) != NULL) {
-        if (*start == '\n') {
+    NODE *line = lines;
+    while (line != NULL) {
+        char *text = line->data;
+        if (strlen(text) == 0) {
             if (cur > max) max = cur;
             cur = 0;
         } else {
-            char temp[32];
-            snprintf(temp, 32, "%.*s", (int) (end - start), start);
-            int parsed = atoi(temp);
+            int parsed = atoi(text);
             cur += parsed;
         }
-        start = end + 1;
+        line = next_node(line);
     }
 
     printf("max: %d\n", max);
@@ -28,7 +26,7 @@ void print_max(char *buf) {
 int main(void) {
     char *buffer = NULL;
     size_t buffer_size;
-
     read_string("../inputs/week_1", &buffer, &buffer_size);
-    print_max(buffer);
+    NODE *lines = read_lines(buffer);
+    print_max(lines);
 }
