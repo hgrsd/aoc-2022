@@ -1,0 +1,13 @@
+# build stuff
+cmake*
+CMake*
+!*/**/CMakeLists.txt
+!CMakeLists.txt
+Makefile
+
+# IDE
+.idea
+
+# artifacts
+*.o
+*.a
