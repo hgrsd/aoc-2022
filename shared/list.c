@@ -15,7 +15,6 @@ LIST *map(LIST *list, void *(fn)(void * elem)) {
         void *m = fn(elem);
         append(mapped, m);
     }
-    destroy(list);
     return mapped;
 }
 
@@ -41,6 +40,10 @@ void append(LIST *list, void *data) {
         list->tail->next = new;
         list->tail = new;
     }
+}
+
+void rewind_list(LIST *list) {
+    list->cur_iter = NULL;
 }
 
 void *get_next(LIST *list) {

@@ -15,27 +15,77 @@ void *parse(void* input) {
     return parsed;
 }
 
-void print_max(LIST *numbers) {
-    int max = 0;
-    int cur = max;
+void part1(LIST *numbers) {
+    int richest_elf = 0;
+    int current_elf = richest_elf;
 
     int *number;
     while ((number = get_next(numbers)) != NULL) {
         if (*number == -1) {
-            if (cur > max) max = cur;
-            cur = 0;
+            if (current_elf > richest_elf) richest_elf = current_elf;
+            current_elf = 0;
         } else {
-            cur += *number;
+            current_elf += *number;
         }
     }
 
-    printf("max: %d\n", max);
+    rewind_list(numbers);
+
+    printf("richest_elf: %d\n", richest_elf);
+}
+
+int cmp(const void *left, const void *right) {
+    int *l = (int *) left;
+    int *r = (int *) right;
+    if (*l < *r) {
+        return -1;
+    }
+
+    if (*r < *l) {
+        return 1;
+    }
+
+    return 0;
+}
+
+void maybe_swap(int top3[3], int cur) {
+    qsort(top3, 3, sizeof(int), cmp);
+    for (int i = 0; i < 3; i++) {
+        if (cur > top3[i]) {
+            top3[i] = cur;
+            break;
+        }
+    }
+}
+
+void part2(LIST *numbers) {
+    int top3[3] = {0, 0, 0};
+    int *number;
+
+    int current_elf = 0;
+    while ((number = get_next(numbers)) != NULL) {
+        if (*number == -1) {
+            maybe_swap(top3, current_elf);
+            current_elf = 0;
+        } else {
+            current_elf += *number;
+        }
+    }
+
+    printf("max sum: %d\n", top3[0] + top3[1] + top3[2]);
 }
 
 int main(void) {
     char *buffer = NULL;
     size_t buffer_size;
+
     read_string("../inputs/day_1", &buffer, &buffer_size);
-    LIST *parsed_lines = map(to_lines(buffer), parse);
-    print_max(parsed_lines);
+
+    LIST *lines = to_lines(buffer);
+
+    LIST *parsed = map(lines, parse);
+    destroy(lines);
+
+    part1(parsed);
+    part2(parsed);
 }

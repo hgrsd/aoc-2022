@@ -16,6 +16,7 @@ typedef struct LIST {
 LIST *new_list(void);
 LIST *map(LIST *list, void *(fn)(void * elem));
 
+void rewind_list(LIST *list);
 void destroy(LIST *list);
 void append(LIST *list, void *data);
 void *get_next(LIST *list);
