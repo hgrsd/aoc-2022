@@ -21,21 +21,32 @@ void read_string(char *path, char **buffer, size_t *buffer_size) {
     *buffer_size = size_with_termination;
 }
 
-LIST *to_lines(char *buf) {
-    LIST *list = new_list();
+List *split_by(char sep, char *buf) {
+    List *list = new_list();
 
     char *start, *end;
     start = end = buf;
 
-    while ((end = strchr(start, '\n')) != NULL) {
+    while ((end = strchr(start, sep)) != NULL) {
         size_t len = (size_t) (end - start) + 1; // +1 for 0-termination
-        char *line = malloc(len * sizeof(*line));
+        char *token = malloc(len * sizeof(*token));
 
-        strncpy(line, start, len - 1);
-        line[len - 1] = '\0';
-        append(list, line);
+        strncpy(token, start, len - 1);
+        token[len - 1] = '\0';
+        append(list, token);
 
         start = end + 1;
+    }
+
+    // if we're not yet at the end of the string, but no further delimiter is present, append the last bit to the list
+    if (start < buf + strlen(buf)) {
+        end = buf + strlen(buf);
+        size_t len = (size_t) (end - start) + 1; // +1 for 0-termination
+        char *token = malloc(len * sizeof(*token));
+
+        strncpy(token, start, len - 1);
+        token[len - 1] = '\0';
+        append(list, token);
     }
 
     return list;

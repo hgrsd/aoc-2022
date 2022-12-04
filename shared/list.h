@@ -7,18 +7,20 @@
 
 #include "node.h"
 
-typedef struct LIST {
+typedef struct List{
     NODE *head;
     NODE *tail;
     NODE *cur_iter;
-} LIST;
+} List;
 
-LIST *new_list(void);
-LIST *map(LIST *list, void *(fn)(void * elem));
+List *new_list(void);
+List *map(List *list, void *(fn)(void * elem));
 
-void rewind_list(LIST *list);
-void destroy(LIST *list);
-void append(LIST *list, void *data);
-void *get_next(LIST *list);
+int sum(List *list);
+
+void rewind_list(List *list);
+void destroy(List *list);
+void append(List *list, void *data);
+void *get_next(List *list);
 
 #endif //AOC_2022_LIST_H

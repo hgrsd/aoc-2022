@@ -6,6 +6,6 @@
 
 
 void read_string(char *path, char **buffer, size_t *buffer_size);
-LIST *to_lines(char *buf);
+List *split_by(char sep, char *buf);
 
 #endif //AOC_2022_COMMON_H

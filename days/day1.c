@@ -15,7 +15,7 @@ void *parse(void* input) {
     return parsed;
 }
 
-void part1(LIST *numbers) {
+void part1(List *numbers) {
     int richest_elf = 0;
     int current_elf = richest_elf;
 
@@ -58,7 +58,7 @@ void maybe_swap(int top3[3], int cur) {
     }
 }
 
-void part2(LIST *numbers) {
+void part2(List *numbers) {
     int top3[3] = {0, 0, 0};
     int *number;
 
@@ -81,9 +81,9 @@ int main(void) {
 
     read_string("../inputs/day_1", &buffer, &buffer_size);
 
-    LIST *lines = to_lines(buffer);
+    List *lines = split_by('\n', buffer);
 
-    LIST *parsed = map(lines, parse);
+    List *parsed = map(lines, parse);
     destroy(lines);
 
     part1(parsed);
