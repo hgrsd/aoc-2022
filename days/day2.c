@@ -37,19 +37,19 @@ int score(Round *round) {
     int outcome_score = 0;
     switch (round->opponent) {
         case ROCK:
-            if (round->me == SCISSORS) outcome_score = 0;
-            if (round->me == ROCK) outcome_score = 3;
-            if (round->me == PAPER) outcome_score = 6;
+            if (round->me == SCISSORS) outcome_score = LOSS_VALUE;
+            if (round->me == ROCK) outcome_score = DRAW_VALUE;
+            if (round->me == PAPER) outcome_score = WIN_VALUE;
             break;
         case PAPER:
-            if (round->me == SCISSORS) outcome_score = 6;
-            if (round->me == ROCK) outcome_score = 0;
-            if (round->me == PAPER) outcome_score = 3;
+            if (round->me == SCISSORS) outcome_score = WIN_VALUE;
+            if (round->me == ROCK) outcome_score = LOSS_VALUE;
+            if (round->me == PAPER) outcome_score = DRAW_VALUE;
             break;
         case SCISSORS:
-            if (round->me == SCISSORS) outcome_score = 3;
-            if (round->me == ROCK) outcome_score = 6;
-            if (round->me == PAPER) outcome_score = 0;
+            if (round->me == SCISSORS) outcome_score = DRAW_VALUE;
+            if (round->me == ROCK) outcome_score = WIN_VALUE;
+            if (round->me == PAPER) outcome_score = LOSS_VALUE;
             break;
     }
 
