@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "common.h"
 
-void *parse(void* input) {
+void *parse(void *input) {
     int *parsed = malloc(sizeof(*parsed));
 
     char *i = input;
@@ -19,8 +19,7 @@ void part1(List *numbers) {
     int richest_elf = 0;
     int current_elf = richest_elf;
 
-    int *number;
-    while ((number = get_next(numbers)) != NULL) {
+    for (int *number = get_next(numbers); number != NULL; number = get_next(numbers)) {
         if (*number == -1) {
             if (current_elf > richest_elf) richest_elf = current_elf;
             current_elf = 0;
@@ -60,10 +59,9 @@ void maybe_swap(int top3[3], int cur) {
 
 void part2(List *numbers) {
     int top3[3] = {0, 0, 0};
-    int *number;
 
     int current_elf = 0;
-    while ((number = get_next(numbers)) != NULL) {
+    for (int *number = get_next(numbers); number != NULL; number = get_next(numbers)) {
         if (*number == -1) {
             maybe_swap(top3, current_elf);
             current_elf = 0;
