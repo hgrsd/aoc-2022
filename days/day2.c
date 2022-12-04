@@ -5,14 +5,17 @@
 
 #define OPPONENT_ROCK "A"
 #define MY_ROCK "X"
+#define SHOULD_LOSE "X"
 #define ROCK_VALUE 1
 
 #define OPPONENT_PAPER "B"
 #define MY_PAPER "Y"
+#define SHOULD_DRAW "Y"
 #define PAPER_VALUE 2
 
 #define OPPONENT_SCISSORS "C"
 #define MY_SCISSORS "Z"
+#define SHOULD_WIN "Z"
 #define SCISSORS_VALUE 3
 
 #define LOSS_VALUE 0
@@ -66,31 +69,72 @@ int score(Round *round) {
     return outcome_score + choice_score;
 }
 
-Play to_play(char *raw) {
-    if (strcmp(raw, OPPONENT_ROCK) == 0 || strcmp(raw, MY_ROCK) == 0) {
+Play parse_as_play(char *raw_instruction) {
+    if (strcmp(raw_instruction, OPPONENT_ROCK) == 0 || strcmp(raw_instruction, MY_ROCK) == 0) {
         return ROCK;
     }
 
-    if (strcmp(raw, OPPONENT_PAPER) == 0 || strcmp(raw, MY_PAPER) == 0) {
+    if (strcmp(raw_instruction, OPPONENT_PAPER) == 0 || strcmp(raw_instruction, MY_PAPER) == 0) {
         return PAPER;
     }
 
     return SCISSORS;
 }
 
-void *score_raw(void *line) {
+Play get_my_turn_1(Play *opponent_play, char *raw_instruction) {
+    return parse_as_play(raw_instruction);
+}
+
+Play get_my_turn_2(Play *opponent_play, char *raw_instruction) {
+    if (strcmp(raw_instruction, SHOULD_DRAW) == 0) {
+        return *opponent_play;
+    }
+
+    if (strcmp(raw_instruction, SHOULD_WIN) == 0) {
+        switch (*opponent_play) {
+            case ROCK:
+                return PAPER;
+            case PAPER:
+                return SCISSORS;
+            default:
+                return ROCK;
+        }
+    }
+
+    switch (*opponent_play) {
+        case ROCK:
+            return SCISSORS;
+        case PAPER:
+            return ROCK;
+        default:
+            return PAPER;
+    }
+
+}
+
+void *score_inner(void *line, Play (*decode_instruction)(Play *, char *)) {
     int *round_score = malloc(sizeof(*round_score));
 
     char *l = line;
-    List *plays = split_by(' ', l);
+    List *instructions = split_by(' ', l);
 
+    Play opponent_play = parse_as_play(get_next(instructions));
     Round round = {
-            .opponent = to_play(get_next(plays)),
-            .me = to_play(get_next(plays))
+            .opponent = opponent_play,
+            .me = decode_instruction(&opponent_play, get_next(instructions))
     };
     *round_score = score(&round);
     return round_score;
 }
+
+void *score_raw_1(void *line) {
+    return score_inner(line, get_my_turn_1);
+}
+
+void *score_raw_2(void *line) {
+    return score_inner(line, get_my_turn_2);
+}
+
 
 int main(void) {
     char *buffer = NULL;
@@ -98,7 +142,9 @@ int main(void) {
 
     read_string("../inputs/day_2", &buffer, &buffer_size);
 
-    int score = sum(map(split_by('\n', buffer), score_raw));
+    int score_1 = sum(map(split_by('\n', buffer), score_raw_1));
+    int score_2 = sum(map(split_by('\n', buffer), score_raw_2));
 
-    printf("day1, part1: %d\n", score);
+    printf("day1, part1: %d\n", score_1);
+    printf("day1, part2: %d\n", score_2);
 }
