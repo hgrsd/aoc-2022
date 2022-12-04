@@ -33,7 +33,7 @@ LIST *to_lines(char *buf) {
 
         strncpy(line, start, len - 1);
         line[len - 1] = '\0';
-        append(list, line, len);
+        append(list, line);
 
         start = end + 1;
     }

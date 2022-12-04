@@ -14,7 +14,10 @@ typedef struct LIST {
 } LIST;
 
 LIST *new_list(void);
-void append(LIST *list, void *data, size_t data_len);
+LIST *map(LIST *list, void *(fn)(void * elem));
+
+void destroy(LIST *list);
+void append(LIST *list, void *data);
 void *get_next(LIST *list);
 
 #endif //AOC_2022_LIST_H

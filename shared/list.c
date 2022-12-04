@@ -8,11 +8,33 @@ LIST *new_list(void) {
    new->cur_iter = NULL;
 }
 
-void append(LIST *list, void *data, size_t data_len) {
+LIST *map(LIST *list, void *(fn)(void * elem)) {
+    LIST *mapped = new_list();
+    void *elem;
+    while ((elem = get_next(list)) != NULL) {
+        void *m = fn(elem);
+        append(mapped, m);
+    }
+    destroy(list);
+    return mapped;
+}
+
+void destroy(LIST *list) {
+    while(list->head != NULL) {
+        NODE *next = next_node(list->head);
+        if(list->head->data != NULL) {
+            free(list->head->data);
+        }
+        free(list->head);
+        list->head = next;
+    }
+    free(list);
+}
+
+void append(LIST *list, void *data) {
     NODE *new = empty_node();
     new->next = NULL;
     new->data = data;
-    new->len = data_len;
 
     if (list->head == NULL) {
         list->head = new;
