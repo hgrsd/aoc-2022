@@ -21,7 +21,7 @@ void read_string(char *path, char **buffer, size_t *buffer_size) {
     *buffer_size = size_with_termination;
 }
 
-void append_chunk(const char *start, const char *end, List *list) {
+static void append_chunk(const char *start, const char *end, List *list) {
     size_t len = (size_t) (end - start) + 1; // +1 for 0-termination
     char *token = malloc(len * sizeof(*token));
 
