@@ -21,6 +21,15 @@ void read_string(char *path, char **buffer, size_t *buffer_size) {
     *buffer_size = size_with_termination;
 }
 
+void append_chunk(const char *start, const char *end, List *list) {
+    size_t len = (size_t) (end - start) + 1; // +1 for 0-termination
+    char *token = malloc(len * sizeof(*token));
+
+    strncpy(token, start, len - 1);
+    token[len - 1] = '\0';
+    append(list, token);
+}
+
 List *split_by(char sep, char *buf) {
     List *list = new_list();
 
@@ -28,25 +37,14 @@ List *split_by(char sep, char *buf) {
     start = end = buf;
 
     while ((end = strchr(start, sep)) != NULL) {
-        size_t len = (size_t) (end - start) + 1; // +1 for 0-termination
-        char *token = malloc(len * sizeof(*token));
-
-        strncpy(token, start, len - 1);
-        token[len - 1] = '\0';
-        append(list, token);
-
+        append_chunk(start, end, list);
         start = end + 1;
     }
 
     // if we're not yet at the end of the string, but no further delimiter is present, append the last bit to the list
     if (start < buf + strlen(buf)) {
         end = buf + strlen(buf);
-        size_t len = (size_t) (end - start) + 1; // +1 for 0-termination
-        char *token = malloc(len * sizeof(*token));
-
-        strncpy(token, start, len - 1);
-        token[len - 1] = '\0';
-        append(list, token);
+        append_chunk(start, end, list);
     }
 
     return list;
