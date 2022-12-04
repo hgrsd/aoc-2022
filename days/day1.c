@@ -24,7 +24,7 @@ void print_max(LIST *lines) {
 int main(void) {
     char *buffer = NULL;
     size_t buffer_size;
-    read_string("../inputs/week_1", &buffer, &buffer_size);
+    read_string("../inputs/day_1", &buffer, &buffer_size);
     LIST *lines = to_lines(buffer);
     print_max(lines);
 }

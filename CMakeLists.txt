@@ -3,4 +3,4 @@ project(aoc_2022 C)
 
 set(CMAKE_C_STANDARD 17)
 add_subdirectory(shared)
-add_subdirectory(weeks)
+add_subdirectory(days)
