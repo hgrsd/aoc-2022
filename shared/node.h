@@ -8,8 +8,7 @@ typedef struct NODE {
     struct NODE* next;
 } NODE;
 
-NODE *empty_node();
-NODE *new_node(NODE *parent, void *data);
+NODE *new_node(void *data);
 NODE *next_node(NODE *cur);
 
 #endif //AOC_2022_NODE_H

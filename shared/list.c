@@ -32,9 +32,7 @@ void destroy(LIST *list) {
 }
 
 void append(LIST *list, void *data) {
-    NODE *new = empty_node();
-    new->next = NULL;
-    new->data = data;
+    NODE *new = new_node(data);
 
     if (list->head == NULL) {
         list->head = new;
