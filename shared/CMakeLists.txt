@@ -1,2 +1,2 @@
-add_library(common common.c common.h node.c node.h)
+add_library(common common.c common.h node.c node.h list.c list.h)
 target_compile_options(common PUBLIC "-Wall")

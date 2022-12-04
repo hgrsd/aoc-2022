@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
-#include "node.h"
+#include "list.h"
 
 void read_string(char *path, char **buffer, size_t *buffer_size) {
     FILE *fp = fopen(path, "r");
@@ -21,31 +21,22 @@ void read_string(char *path, char **buffer, size_t *buffer_size) {
     *buffer_size = size_with_termination;
 }
 
-NODE *read_lines(char *buf) {
-    NODE *head = empty_node();
-    NODE *cur = head;
+LIST *to_lines(char *buf) {
+    LIST *list = new_list();
 
     char *start, *end;
     start = end = buf;
 
-    int is_first = 1;
     while ((end = strchr(start, '\n')) != NULL) {
         size_t len = (size_t) (end - start) + 1; // +1 for 0-termination
         char *line = malloc(len * sizeof(*line));
 
         strncpy(line, start, len - 1);
         line[len - 1] = '\0';
-
-        if (is_first) { // first iteration
-            head->data = line;
-            head->len = len;
-        } else {
-            cur = new_node(cur, line, len);
-        }
+        append(list, line, len);
 
         start = end + 1;
-        is_first = 0;
     }
 
-    return head;
+    return list;
 }

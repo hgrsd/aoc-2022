@@ -12,13 +12,3 @@ NODE *empty_node(void) {
     new->data = NULL;
     return new;
 }
-
-NODE *new_node(NODE *parent, void *data, size_t len) {
-    NODE *new = empty_node();
-    new->len = len;
-    new->data = data;
-    if (parent != NULL) {
-        parent->next = new;
-    }
-    return new;
-}
