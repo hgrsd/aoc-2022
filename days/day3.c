@@ -79,6 +79,7 @@ int main(void) {
 
     read_string("../inputs/day_3", &buffer, &buffer_size);
     List *lines = split_by('\n', buffer);
+    free(buffer);
 
     part_1(lines);
     part_2(lines);

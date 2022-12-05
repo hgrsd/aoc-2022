@@ -142,9 +142,14 @@ int main(void) {
 
     read_string("../inputs/day_2", &buffer, &buffer_size);
 
-    int score_1 = sum(map(split_by('\n', buffer), score_raw_1));
-    int score_2 = sum(map(split_by('\n', buffer), score_raw_2));
+    List *lines = split_by('\n', buffer);
+    free(buffer);
 
-    printf("day1, part1: %d\n", score_1);
-    printf("day1, part2: %d\n", score_2);
+    List *scores_1 = map(lines, score_raw_1);
+    printf("day1, part1: %d\n", sum(scores_1));
+    destroy(scores_1);
+
+    List *scores_2 = map(lines, score_raw_2);
+    printf("day1, part2: %d\n", sum(scores_2));
+    destroy(scores_2);
 }

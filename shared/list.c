@@ -16,6 +16,7 @@ List *map(List *list, void *(fn)(void * elem)) {
         void *m = fn(elem);
         append(mapped, m);
     }
+    rewind_list(list);
     return mapped;
 }
 

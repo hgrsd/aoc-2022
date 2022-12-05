@@ -80,6 +80,7 @@ int main(void) {
     read_string("../inputs/day_1", &buffer, &buffer_size);
 
     List *lines = split_by('\n', buffer);
+    free(buffer);
 
     List *parsed = map(lines, parse);
     destroy(lines);
