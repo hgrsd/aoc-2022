@@ -6,6 +6,7 @@ List *new_list(void) {
    new->head = NULL;
    new->tail = NULL;
    new->cur_iter = NULL;
+   return new;
 }
 
 List *map(List *list, void *(fn)(void * elem)) {
@@ -54,6 +55,18 @@ void append(List *list, void *data) {
 
 void rewind_list(List *list) {
     list->cur_iter = NULL;
+}
+
+int has_next(List *list) {
+    if (list->cur_iter == NULL && list->head) {
+        return 1;
+    }
+
+    if (list->cur_iter && list->cur_iter->next) {
+        return 1;
+    }
+
+    return 0;
 }
 
 void *get_next(List *list) {

@@ -21,6 +21,7 @@ int sum(List *list);
 void rewind_list(List *list);
 void destroy(List *list);
 void append(List *list, void *data);
+int has_next(List *list);
 void *get_next(List *list);
 
 #endif //AOC_2022_LIST_H
