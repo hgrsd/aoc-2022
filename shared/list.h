@@ -1,9 +1,8 @@
-//
-// Created by daniel on 03/12/22.
-//
-
 #ifndef AOC_2022_LIST_H
 #define AOC_2022_LIST_H
+#define iter_list(list, elem, type) for(type elem = get_next(list); elem != NULL; elem = get_next(list))
+
+
 
 #include "node.h"
 
