@@ -1,4 +1,4 @@
-foreach(day RANGE 1 3)
+foreach(day RANGE 1 4)
     add_executable("day${day}" "day${day}.c")
     target_compile_options("day${day}" PUBLIC "-Wall")
     target_link_libraries("day${day}" common)

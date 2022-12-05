@@ -19,7 +19,7 @@ void part1(List *numbers) {
     int richest_elf = 0;
     int current_elf = richest_elf;
 
-    for (int *number = get_next(numbers); number != NULL; number = get_next(numbers)) {
+    iter_list(numbers, number, int*) {
         if (*number == -1) {
             if (current_elf > richest_elf) richest_elf = current_elf;
             current_elf = 0;
@@ -31,7 +31,7 @@ void part1(List *numbers) {
     rewind_list(numbers);
 
     printf("richest_elf: %d\n", richest_elf);
-}
+
 
 int cmp(const void *left, const void *right) {
     int *l = (int *) left;
