@@ -9,18 +9,17 @@ int has_overlap(int start0, int end0, int start1, int end1) {
     return one_contains_other(start0, end0, start1, end1)
            || (start0 <= start1 && end0 >= start1)
            || (start1 <= start0 && end1 >= start0);
-
 }
 
-int sum_with(List *lines, int(*overlap_getter)(int, int, int, int)) {
-    int overlapping_pairs = 0;
+int sum_with(List *lines, int(*get_value)(int, int, int, int)) {
+    int sum = 0;
     iter_list(lines, line, char *) {
         int elf1_start, elf1_end, elf2_start, elf2_end;
         sscanf(line, "%d-%d,%d-%d", &elf1_start, &elf1_end, &elf2_start, &elf2_end);
-        int has_overlap = overlap_getter(elf1_start, elf1_end, elf2_start, elf2_end);
-        overlapping_pairs += has_overlap;
+        sum += get_value(elf1_start, elf1_end, elf2_start, elf2_end);
     }
-    return overlapping_pairs;
+
+    return sum;
 }
 
 int main(void) {
