@@ -31,6 +31,7 @@ void part1(List *numbers) {
     rewind_list(numbers);
 
     printf("richest_elf: %d\n", richest_elf);
+}
 
 
 int cmp(const void *left, const void *right) {
