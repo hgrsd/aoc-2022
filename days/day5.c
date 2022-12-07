@@ -20,14 +20,14 @@ void split_input(char *input, char **state_buf, char **instructions_buf) {
     size_t state_len = (split - input) + 1;
     char *state = malloc(sizeof(*state) * state_len);
     strncpy(state, input, state_len);
-    state[state_len - 1] = 0x00;
+    state[state_len - 1] = '\0';
     *state_buf = state;
 
     size_t instructions_len = strlen(input) - state_len - 1; // don't include the two newlines, but keep room for 0x0
     char *instructions_start = split + 2; // skip the two newlines to get to the start of the instructions
     char *instructions = malloc(sizeof(*instructions) * instructions_len);
     strncpy(instructions, instructions_start, instructions_len);
-    instructions[instructions_len - 1] = 0x00;
+    instructions[instructions_len - 1] = '\0';
     *instructions_buf = instructions;
 }
 
@@ -38,12 +38,12 @@ size_t stack_count(char *line) {
     return stacks;
 }
 
-void get_initial_stacks(char *state, List ***stack_array, size_t *n_stacks) {
-    List *state_lines = split_by('\n', state);
+void get_initial_stacks(char *raw_state, List ***stack_array, size_t *n_stacks) {
+    List *state_lines = split_by('\n', raw_state);
     reverse(state_lines);
 
-    char *stack_line = get_next(state_lines);
-    size_t stacks = stack_count(stack_line);
+    char *number_line = get_next(state_lines);
+    size_t stacks = stack_count(number_line);
 
     List **s = malloc(sizeof(List *) * stacks);
     for (int i = 0; i < stacks; i++) {
@@ -96,16 +96,16 @@ void apply_instructions_2(char *instructions_raw, List **stacks) {
 }
 
 void run_crane(char *raw_input, void (*apply_instructions)(char *instructions_raw, List **stacks)) {
-    char *state, *instructions;
+    char *raw_state, *raw_instructions;
     List **stacks;
     size_t num_stacks;
 
-    split_input(raw_input, &state, &instructions);
-    get_initial_stacks(state, &stacks, &num_stacks);
-    apply_instructions(instructions, stacks);
+    split_input(raw_input, &raw_state, &raw_instructions);
+    get_initial_stacks(raw_state, &stacks, &num_stacks);
+    apply_instructions(raw_instructions, stacks);
 
-    free(state);
-    free(instructions);
+    free(raw_state);
+    free(raw_instructions);
     for (int i = 0; i < num_stacks; i++) {
         char *top_crate = pop(stacks[i]);
         printf("%c", *top_crate);

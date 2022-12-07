@@ -14,7 +14,7 @@ void read_string(char *path, char **buffer, size_t *buffer_size) {
 
     data = malloc(size_with_termination * sizeof(*data));
     fread(data, sizeof(*data), file_size, fp);
-    data[file_size] = 0x00;
+    data[file_size] = '\0';
     fclose(fp);
 
     *buffer = data;
