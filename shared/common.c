@@ -27,7 +27,7 @@ static void append_chunk(const char *start, const char *end, List *list) {
 
     strncpy(token, start, len - 1);
     token[len - 1] = '\0';
-    append(list, token);
+    push_back(list, token);
 }
 
 List *split_by(char sep, char *buf) {
@@ -41,7 +41,7 @@ List *split_by(char sep, char *buf) {
         start = end + 1;
     }
 
-    // if we're not yet at the end of the string, but no further delimiter is present, append the last bit to the list
+    // if we're not yet at the end of the string, but no further delimiter is present, push_back the last bit to the list
     if (start < buf + strlen(buf)) {
         end = buf + strlen(buf);
         append_chunk(start, end, list);

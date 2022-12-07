@@ -1,4 +1,5 @@
 #include <malloc.h>
+#include <assert.h>
 #include "list.h"
 
 List *new_list(void) {
@@ -6,6 +7,7 @@ List *new_list(void) {
    new->head = NULL;
    new->tail = NULL;
    new->cur_iter = NULL;
+   new->len = 0;
    return new;
 }
 
@@ -14,7 +16,7 @@ List *map(List *list, void *(fn)(void * elem)) {
     void *elem;
     while ((elem = get_next(list)) != NULL) {
         void *m = fn(elem);
-        append(mapped, m);
+        push_back(mapped, m);
     }
     rewind_list(list);
     return mapped;
@@ -32,7 +34,7 @@ int sum(List *list) {
 
 void destroy(List *list) {
     while(list->head != NULL) {
-        NODE *next = next_node(list->head);
+        Node *next = next_node(list->head);
         if(list->head->data != NULL) {
             free(list->head->data);
         }
@@ -42,8 +44,10 @@ void destroy(List *list) {
     free(list);
 }
 
-void append(List *list, void *data) {
-    NODE *new = new_node(data);
+void push_back(List *list, void *data) {
+    assert(list->cur_iter == NULL);
+
+    Node *new = new_node(data);
 
     if (list->head == NULL) {
         list->head = new;
@@ -52,6 +56,34 @@ void append(List *list, void *data) {
         list->tail->next = new;
         list->tail = new;
     }
+
+    list->len++;
+}
+
+void push(List *list, void *data) {
+    assert(list->cur_iter == NULL);
+
+    Node *new = new_node(data);
+    if (list->head) {
+        new->next = list->head;
+    }
+
+    list->head = new;
+    list->len++;
+}
+
+void *pop(List *list) {
+    assert(list->cur_iter == NULL);
+
+    Node *n = list->head;
+    if (!n) {
+        return NULL;
+    }
+
+    list->head = n->next;
+    void *data = n->data;
+    free(n);
+    return data;
 }
 
 void rewind_list(List *list) {
@@ -80,7 +112,23 @@ void *get_next(List *list) {
         return NULL;
     }
 
-    NODE *next = list->cur_iter->next;
+    Node *next = list->cur_iter->next;
     list->cur_iter = next;
     return next->data;
+}
+
+void reverse(List *list) {
+    Node *cur = list->head;
+    list->tail =  list->head;
+    Node *prev = NULL;
+    Node *next = NULL;
+
+    while(cur) {
+        next = cur->next;
+        cur->next = prev;
+        prev = cur;
+        cur = next;
+    }
+
+    list->head = prev;
 }

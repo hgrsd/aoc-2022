@@ -3,12 +3,12 @@
 
 #include <stddef.h>
 
-typedef struct NODE {
+typedef struct Node {
     void *data;
-    struct NODE* next;
-} NODE;
+    struct Node* next;
+} Node;
 
-NODE *new_node(void *data);
-NODE *next_node(NODE *cur);
+Node *new_node(void *data);
+Node *next_node(Node *cur);
 
 #endif //AOC_2022_NODE_H
