@@ -109,6 +109,7 @@ void run_crane(char *raw_input, void (*apply_instructions)(char *instructions_ra
     for (int i = 0; i < num_stacks; i++) {
         char *top_crate = pop(stacks[i]);
         printf("%c", *top_crate);
+        free(top_crate);
         destroy(stacks[i]);
     }
     free(stacks);
