@@ -12,7 +12,7 @@ void append_treenode(TreeNode *parent, TreeNode *child) {
     push_back(parent->children, child);
 }
 
-void map_dfs_inner(TreeNode *root, void *(*map_fn)(TreeNode *), List *accumulator) {
+static void map_dfs_inner(TreeNode *root, void *(*map_fn)(TreeNode *), List *accumulator) {
     if (!root) return;
     void *mapped = map_fn(root);
     push(accumulator, mapped);
@@ -28,12 +28,12 @@ List *map_dfs(TreeNode *root, void *(*map_fn)(TreeNode *)) {
     return mapped;
 }
 
-void destroy_tree(TreeNode *root) {
-    iter_list(root->children, child, TreeNode *) {
-        destroy_tree(child);
-    }
 
-    destroy(root->children);
-    free(root->data);
-    free(root);
+void destroy_tree(TreeNode *root) {
+    iter_list(root->children, node, TreeNode *) {
+        destroy_tree(node);
+        destroy_list(node->children);
+        free(node->data);
+        free(node);
+    }
 }

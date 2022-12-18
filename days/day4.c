@@ -36,5 +36,5 @@ int main(void) {
 
     printf("day 4, part 1: %d\n", part_1);
     printf("day 4, part 2: %d\n", part_2);
-    destroy(lines);
+    destroy_list(lines);
 }

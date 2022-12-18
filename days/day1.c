@@ -84,7 +84,7 @@ int main(void) {
     free(buffer);
 
     List *parsed = map(lines, parse);
-    destroy(lines);
+    destroy_list(lines);
 
     part1(parsed);
     part2(parsed);

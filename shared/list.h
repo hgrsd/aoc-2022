@@ -26,7 +26,7 @@ int sum(List *list);
 
 void rewind_list(List *list);
 
-void destroy(List *list);
+void destroy_list(List *list);
 
 void push_back(List *list, void *data);
 

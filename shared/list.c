@@ -6,7 +6,7 @@ Node *next_node(Node *cur) {
     return cur->next;
 }
 
-Node *new_node(void* data) {
+Node *new_node(void *data) {
     Node *new = malloc(sizeof(*new));
     new->next = NULL;
     new->data = data;
@@ -15,15 +15,15 @@ Node *new_node(void* data) {
 
 
 List *new_list(void) {
-   List *new = malloc(sizeof(*new));
-   new->head = NULL;
-   new->tail = NULL;
-   new->cur_iter = NULL;
-   new->len = 0;
-   return new;
+    List *new = malloc(sizeof(*new));
+    new->head = NULL;
+    new->tail = NULL;
+    new->cur_iter = NULL;
+    new->len = 0;
+    return new;
 }
 
-List *map(List *list, void *(fn)(void * elem)) {
+List *map(List *list, void *(fn)(void *elem)) {
     List *mapped = new_list();
     void *elem;
     while ((elem = get_next(list)) != NULL) {
@@ -44,10 +44,10 @@ int sum(List *list) {
     return total;
 }
 
-void destroy(List *list) {
-    while(list->head != NULL) {
+void destroy_list(List *list) {
+    while (list->head != NULL) {
         Node *next = next_node(list->head);
-        if(list->head->data != NULL) {
+        if (list->head->data != NULL) {
             free(list->head->data);
         }
         free(list->head);
@@ -131,11 +131,11 @@ void *get_next(List *list) {
 
 void reverse(List *list) {
     Node *cur = list->head;
-    list->tail =  list->head;
+    list->tail = list->head;
     Node *prev = NULL;
     Node *next = NULL;
 
-    while(cur) {
+    while (cur) {
         next = cur->next;
         cur->next = prev;
         prev = cur;

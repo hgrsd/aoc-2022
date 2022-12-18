@@ -1,9 +1,12 @@
 #include <stddef.h>
 #include <string.h>
+#include <limits.h>
 #include "common.h"
 #include "tree.h"
 
 #define BUF_SIZE 64
+#define TOTAL_DISK_SPACE 70000000
+#define REQUIRED_FREE_SPACE 30000000
 
 typedef enum NodeType {
     DIRECTORY_NODE,
@@ -84,7 +87,6 @@ void append_file(TreeNode *current, char *filename, long size) {
 }
 
 void apply(TreeNode **current, char *instruction) {
-    printf("applying: %s\n", instruction);
     long size;
     char buf[BUF_SIZE];
 
@@ -112,6 +114,7 @@ TreeNode *build_file_system_tree(List *instructions) {
     iter_list(instructions, instruction, char *) {
         apply(&cur, instruction);
     }
+    rewind_list(instructions);
     return root;
 }
 
@@ -136,16 +139,22 @@ int main(void) {
     free(buf);
 
     TreeNode *file_tree = build_file_system_tree(instructions);
-    destroy(instructions);
-
+    destroy_list(instructions);
     List *dirsizes = map_dfs(file_tree, dirsize);
+
     long part1 = 0;
+    long used_diskspace = ((FileSystemNode *) file_tree->data)->size;
+    long required_freeup = REQUIRED_FREE_SPACE - (TOTAL_DISK_SPACE - used_diskspace);
+    long part2 = LONG_MAX;
     iter_list(dirsizes, s, long *) {
         if (*s <= 100000) part1 += *s;
+        if (*s >= required_freeup && *s < part2) {
+            part2 = *s;
+        }
     }
-
-
     printf("day 7, part 1: %ld\n", part1);
+    printf("day 7, part 2: %ld\n", part2);
 
+    destroy_list(dirsizes);
     destroy_tree(file_tree);
 }
