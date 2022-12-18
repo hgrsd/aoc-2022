@@ -2,8 +2,14 @@
 #define AOC_2022_LIST_H
 #define iter_list(list, elem, type) for(type elem = get_next(list); elem != NULL; elem = get_next(list))
 
+typedef struct Node {
+    void *data;
+    struct Node *next;
+} Node;
 
-#include "node.h"
+Node *new_node(void *data);
+
+Node *next_node(Node *cur);
 
 typedef struct List {
     Node *head;
