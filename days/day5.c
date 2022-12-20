@@ -63,7 +63,7 @@ void get_initial_stacks(char *raw_state, List ***stack_array, size_t *n_stacks) 
 
     *n_stacks = stacks;
     *stack_array = s;
-    destroy_list(state_lines);
+    destroy_list(state_lines, 1);
 }
 
 void apply_instructions_1(char *instructions_raw, List **stacks) {
@@ -76,7 +76,7 @@ void apply_instructions_1(char *instructions_raw, List **stacks) {
             push(stacks[to - 1], crate);
         }
     }
-    destroy_list(instructions);
+    destroy_list(instructions, 1);
 }
 
 void apply_instructions_2(char *instructions_raw, List **stacks) {
@@ -92,7 +92,7 @@ void apply_instructions_2(char *instructions_raw, List **stacks) {
             push(stacks[to - 1], crates[i]);
         }
     }
-    destroy_list(instructions);
+    destroy_list(instructions, 1);
 }
 
 void run_crane(char *raw_input, void (*apply_instructions)(char *instructions_raw, List **stacks)) {
@@ -110,7 +110,7 @@ void run_crane(char *raw_input, void (*apply_instructions)(char *instructions_ra
         char *top_crate = pop(stacks[i]);
         printf("%c", *top_crate);
         free(top_crate);
-        destroy_list(stacks[i]);
+        destroy_list(stacks[i], 1);
     }
     free(stacks);
     printf("\n");

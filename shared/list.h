@@ -26,7 +26,7 @@ int sum(List *list);
 
 void rewind_list(List *list);
 
-void destroy_list(List *list);
+void destroy_list(List *list, int should_free_data);
 
 void push_back(List *list, void *data);
 
@@ -37,6 +37,7 @@ void *pop(List *list);
 int has_next(List *list);
 
 void *get_next(List *list);
+Node *get_next_node(List *list);
 
 void reverse(List *list);
 

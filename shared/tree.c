@@ -8,7 +8,10 @@ TreeNode *new_treenode(TreeNode *parent) {
     return node;
 }
 
+static int count = 0;
 void append_treenode(TreeNode *parent, TreeNode *child) {
+    count++;
+    printf("appending node %d\n", count);
     push_back(parent->children, child);
 }
 
@@ -19,6 +22,7 @@ static void map_dfs_inner(TreeNode *root, void *(*map_fn)(TreeNode *), List *acc
     iter_list(root->children, child, TreeNode *) {
         map_dfs_inner(child, map_fn, accumulator);
     }
+    rewind_list(root->children);
 }
 
 List *map_dfs(TreeNode *root, void *(*map_fn)(TreeNode *)) {
@@ -32,8 +36,8 @@ List *map_dfs(TreeNode *root, void *(*map_fn)(TreeNode *)) {
 void destroy_tree(TreeNode *root) {
     iter_list(root->children, node, TreeNode *) {
         destroy_tree(node);
-        destroy_list(node->children);
-        free(node->data);
-        free(node);
     }
+    destroy_list(root->children, 0);
+    free(root->data);
+    free(root);
 }

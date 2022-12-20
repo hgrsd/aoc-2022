@@ -147,9 +147,9 @@ int main(void) {
 
     List *scores_1 = map(lines, score_raw_1);
     printf("day1, part1: %d\n", sum(scores_1));
-    destroy_list(scores_1);
+    destroy_list(scores_1, 1);
 
     List *scores_2 = map(lines, score_raw_2);
     printf("day1, part2: %d\n", sum(scores_2));
-    destroy_list(scores_2);
+    destroy_list(scores_2, 1);
 }

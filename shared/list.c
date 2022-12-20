@@ -44,10 +44,10 @@ int sum(List *list) {
     return total;
 }
 
-void destroy_list(List *list) {
+void destroy_list(List *list, int should_free_data) {
     while (list->head != NULL) {
         Node *next = next_node(list->head);
-        if (list->head->data != NULL) {
+        if (list->head->data != NULL && should_free_data) {
             free(list->head->data);
         }
         free(list->head);
@@ -114,10 +114,10 @@ int has_next(List *list) {
     return 0;
 }
 
-void *get_next(List *list) {
+Node *get_next_node(List *list) {
     if (list->cur_iter == NULL && list->head) {
         list->cur_iter = list->head;
-        return list->head->data;
+        return list->head;
     }
 
     if (list->cur_iter == NULL || list->cur_iter->next == NULL) {
@@ -126,7 +126,12 @@ void *get_next(List *list) {
 
     Node *next = list->cur_iter->next;
     list->cur_iter = next;
-    return next->data;
+    return next;
+}
+
+void *get_next(List *list) {
+    Node *next = get_next_node(list);
+    return next ? next->data : NULL;
 }
 
 void reverse(List *list) {

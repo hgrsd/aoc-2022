@@ -27,7 +27,6 @@ TreeNode *fs_root(void) {
     root_fsnode->size = 0;
     root_fsnode->type = DIRECTORY_NODE;
 
-    root->children = new_list();
     root->data = root_fsnode;
     root->parent = NULL;
 
@@ -41,7 +40,7 @@ void move(TreeNode **current, char *to) {
         return;
     }
 
-    iter_list((*current)->children, child, TreeNode *) {
+    iter_list(c->children, child, TreeNode *) {
         FileSystemNode *fs = (FileSystemNode *) child->data;
 
         if (strcmp(fs->name, to) == 0 && fs->type == DIRECTORY_NODE) {
@@ -139,7 +138,7 @@ int main(void) {
     free(buf);
 
     TreeNode *file_tree = build_file_system_tree(instructions);
-    destroy_list(instructions);
+    destroy_list(instructions, 1);
     List *dirsizes = map_dfs(file_tree, dirsize);
 
     long part1 = 0;
@@ -155,6 +154,6 @@ int main(void) {
     printf("day 7, part 1: %ld\n", part1);
     printf("day 7, part 2: %ld\n", part2);
 
-    destroy_list(dirsizes);
+    destroy_list(dirsizes, 1);
     destroy_tree(file_tree);
 }
