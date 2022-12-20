@@ -8,10 +8,7 @@ TreeNode *new_treenode(TreeNode *parent) {
     return node;
 }
 
-static int count = 0;
 void append_treenode(TreeNode *parent, TreeNode *child) {
-    count++;
-    printf("appending node %d\n", count);
     push_back(parent->children, child);
 }
 
