@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include <pthread.h>
 #include "list.h"
 #include "common.h"
 
@@ -85,25 +86,35 @@ int is_visible(int **grid, int row, int col, size_t n_rows, size_t n_cols) {
 
 }
 
-int day8_part1(int **grid, size_t n_rows, size_t n_cols) {
+struct Args {
+    int **grid;
+    size_t n_rows;
+    size_t n_cols;
+};
+
+void *day8_part1(void *args) {
+    struct Args *a = args;
     int total = 0;
-    for (int i = 0; i < n_rows; i++) {
-        for (int j = 0; j < n_cols; j++) {
-            total += is_visible(grid, i, j, n_rows, n_cols);
+    for (int i = 0; i < a->n_rows; i++) {
+        for (int j = 0; j < a->n_cols; j++) {
+            total += is_visible(a->grid, i, j, a->n_rows, a->n_cols);
         }
     }
-    return total;
+    printf("day 8, part 1: %d\n", total);
+    return NULL;
 }
 
-int day8_part2(int **grid, size_t n_rows, size_t n_cols) {
+void *day8_part2(void *args) {
+    struct Args *a = args;
     int max_score = 0;
-    for (int i = 0; i < n_rows; i++) {
-        for (int j = 0; j < n_cols; j++) {
-            int score = scenic_score(grid, i, j, n_rows, n_cols);
+    for (int i = 0; i < a->n_rows; i++) {
+        for (int j = 0; j < a->n_cols; j++) {
+            int score = scenic_score(a->grid, i, j, a->n_rows, a->n_cols);
             if (score > max_score) max_score = score;
         }
     }
-    return max_score;
+    printf("day 8, part 2: %d\n", max_score);
+    return NULL;
 }
 
 int **initialize_grid(List *lines, size_t *n_rows, size_t *n_cols) {
@@ -139,12 +150,23 @@ int main(void) {
     size_t n_rows, n_cols;
     int **grid = initialize_grid(lines, &n_rows, &n_cols);
 
-    printf("day 8, part 1: %d\n", day8_part1(grid, n_rows, n_cols));
-    printf("day 8, part 2: %d\n", day8_part2(grid, n_rows, n_cols));
+    struct Args args = {
+        .n_rows = n_rows,
+        .n_cols = n_cols,
+        .grid = grid
+    };
+
+    pthread_t tid0;
+    pthread_create(&tid0, NULL, day8_part1, (void *)&args);
+    pthread_t tid1;
+    pthread_create(&tid1, NULL, day8_part2, (void *)&args);
+    pthread_join(tid0, NULL);
+    pthread_join(tid1, NULL);
+
 
     destroy_list(lines, 1);
     free(buf);
-    for(int i = 0; i < n_rows; i++) {
+    for (int i = 0; i < n_rows; i++) {
         free(grid[i]);
     }
     free(grid);
