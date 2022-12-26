@@ -3,15 +3,18 @@
 #include <stdlib.h>
 #include "common.h"
 
-typedef struct Coordinate {
+typedef struct {
     int x;
     int y;
 } Coordinate;
+
+List *accountant;
 
 Coordinate *coordinate(int x, int y) {
     Coordinate *c = malloc(sizeof(*c));
     c->x = x;
     c->y = y;
+    push_back(accountant, c);
     return c;
 }
 
@@ -79,8 +82,10 @@ void part1(List *lines) {
             push_if_unique(tail_visited, tail);
         }
     }
-    rewind_list(lines);
     printf("day 9, part 1: %zu\n", tail_visited->len);
+
+    rewind_list(lines);
+    destroy_list(tail_visited, 0);
 }
 
 void part2(List *lines) {
@@ -116,23 +121,36 @@ void part2(List *lines) {
                 default:
                     assert("Unreachable");
             }
-            for (int j = 1; j < 10; j++ ) {
+            for (int j = 1; j < 10; j++) {
                 knots[j] = move_tail(knots[j - 1], knots[j]);
             }
             push_if_unique(tail_visited, knots[9]);
         }
     }
-    rewind_list(lines);
     printf("day 9, part 2: %zu\n", tail_visited->len);
+
+    rewind_list(lines);
+    destroy_list(tail_visited, 0);
 }
 
 int main(void) {
     char *buf;
     size_t sz;
 
+    accountant = new_list();
+
     read_string("../inputs/day_9", &buf, &sz);
 
     List *lines = split_by('\n', buf);
+    free(buf);
+
     part1(lines);
     part2(lines);
+
+    iter_list(accountant, c, Coordinate *) {
+        free(c);
+    }
+    destroy_list(accountant, 0);
+
+    destroy_list(lines, 1);
 }
