@@ -3,18 +3,21 @@
 #include <stdlib.h>
 #include "common.h"
 
+#define POOL_SIZE 256000
+
 typedef struct {
     int x;
     int y;
 } Coordinate;
 
-List *accountant;
+Coordinate *pool;
+int pool_idx = 0;
 
 Coordinate *coordinate(int x, int y) {
-    Coordinate *c = malloc(sizeof(*c));
+    Coordinate *c = pool + pool_idx;
+    pool_idx++;
     c->x = x;
     c->y = y;
-    push_back(accountant, c);
     return c;
 }
 
@@ -133,24 +136,23 @@ void part2(List *lines) {
     destroy_list(tail_visited, 0);
 }
 
+void init_pool() {
+    pool = malloc(sizeof(*pool) * POOL_SIZE);
+}
+
 int main(void) {
     char *buf;
     size_t sz;
-
-    accountant = new_list();
 
     read_string("../inputs/day_9", &buf, &sz);
 
     List *lines = split_by('\n', buf);
     free(buf);
 
+    init_pool();
     part1(lines);
     part2(lines);
-
-    iter_list(accountant, c, Coordinate *) {
-        free(c);
-    }
-    destroy_list(accountant, 0);
+    free(pool);
 
     destroy_list(lines, 1);
 }
