@@ -1,4 +1,4 @@
-#include <malloc.h>
+#include <stdlib.h>
 #include "common.h"
 
 int one_contains_other(int start0, int end0, int start1, int end1) {

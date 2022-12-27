@@ -1,4 +1,3 @@
-#include <malloc.h>
 #include <assert.h>
 #include <stdlib.h>
 #include "common.h"
@@ -13,9 +12,18 @@ typedef struct {
 Coordinate *pool;
 int pool_idx = 0;
 
-Coordinate *coordinate(int x, int y) {
+Coordinate *get_from_pool() {
     Coordinate *c = pool + pool_idx;
     pool_idx++;
+    return c;
+}
+
+void init_pool() {
+    pool = malloc(sizeof(*pool) * POOL_SIZE);
+}
+
+Coordinate *coordinate(int x, int y) {
+    Coordinate *c = get_from_pool();
     c->x = x;
     c->y = y;
     return c;
@@ -136,9 +144,6 @@ void part2(List *lines) {
     destroy_list(tail_visited, 0);
 }
 
-void init_pool() {
-    pool = malloc(sizeof(*pool) * POOL_SIZE);
-}
 
 int main(void) {
     char *buf;

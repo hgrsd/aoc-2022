@@ -1,7 +1,7 @@
 #ifndef AOC_2022_TREE_H
 #define AOC_2022_TREE_H
 
-#include <malloc.h>
+#include <stdlib.h>
 #include "list.h"
 
 typedef struct TreeNode {
